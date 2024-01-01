@@ -1,2 +1,4 @@
 # Forgotten-Shadows
-Souls like game made with Unity URP
+Game made with Unity URP
+
+Human fall flat character, goal to determine...
