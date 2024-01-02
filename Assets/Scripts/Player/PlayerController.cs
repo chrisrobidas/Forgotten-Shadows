@@ -1,43 +1,62 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private CharacterController controller;
-    private Vector3 playerVelocity;
-    private bool groundedPlayer;
-    private float playerSpeed = 2.0f;
-    private float jumpHeight = 1.0f;
-    private float gravityValue = -9.81f;
+    public bool IsGrounded;
+
+    [SerializeField]
+    private float _speed = 2.0f;
+
+    [SerializeField]
+    private float _strafeSpeed;
+
+    [SerializeField]
+    private float _jumpForce;
+
+    private Rigidbody _hips;
 
     private void Start()
     {
-        controller = gameObject.AddComponent<CharacterController>();
+        _hips = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (controller.isGrounded && playerVelocity.y < 0)
+        if (Input.GetKey(KeyCode.W))
         {
-            playerVelocity.y = 0f;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                _hips.AddForce(_hips.transform.forward * _speed * 1.5f);
+            }
+            else
+            {
+                _hips.AddForce(_hips.transform.forward * _speed);
+            }
         }
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        controller.Move(move * Time.deltaTime * playerSpeed);
-
-        if (move != Vector3.zero)
+        if (Input.GetKey(KeyCode.A)) 
         {
-            gameObject.transform.forward = move;
+            _hips.AddForce(-_hips.transform.right * _strafeSpeed);
         }
 
-        // Changes the height position of the player
-        if (Input.GetButtonDown("Jump") && controller.isGrounded)
+        if (Input.GetKey(KeyCode.S))
         {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            _hips.AddForce(-_hips.transform.forward * _speed);
         }
 
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            _hips.AddForce(_hips.transform.right * _strafeSpeed);
+        }
+
+        if (Input.GetAxis("Jump") > 0)
+        {
+            if (IsGrounded)
+            {
+                _hips.AddForce(new Vector3(0, _jumpForce, 0));
+                IsGrounded = false;
+            }
+        }
     }
 }
