@@ -3,19 +3,19 @@ using UnityEngine;
 public class CopyMotion : MonoBehaviour
 {
     [SerializeField]
-    private Transform targetLimb;
+    private Transform _targetLimb;
 
-    private ConfigurableJoint configurableJoint;
-    private Quaternion initialRotation;
+    private ConfigurableJoint _configurableJoint;
+    private Quaternion _initialRotation;
 
     private void Start()
     {
-        configurableJoint = GetComponent<ConfigurableJoint>();
-        initialRotation = transform.localRotation;
+        _configurableJoint = GetComponent<ConfigurableJoint>();
+        _initialRotation = transform.localRotation;
     }
 
     private void Update()
     {
-        configurableJoint.targetRotation = Quaternion.Inverse(targetLimb.rotation * initialRotation);
+        _configurableJoint.targetRotation = Quaternion.Inverse(_targetLimb.rotation * _initialRotation);
     }
 }
