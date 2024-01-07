@@ -69,4 +69,9 @@ public class Grab : MonoBehaviour
             _grabbedObjectInitialMass = _grabbedObject.GetComponent<Rigidbody>().mass;
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _grabbedObject = null;
+    }
 }
