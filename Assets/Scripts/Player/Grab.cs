@@ -103,6 +103,9 @@ public class Grab : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        _grabbedObject = null;
+        if (_grabbedObjectJoint == null)
+        {
+            _grabbedObject = null;
+        }
     }
 }
