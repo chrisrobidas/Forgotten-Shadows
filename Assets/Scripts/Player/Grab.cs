@@ -6,67 +6,98 @@ public class Grab : MonoBehaviour
     private Animator _animator;
 
     [SerializeField]
+    private Transform _cameraFollowTargetTransform;
+
+    [SerializeField]
+    private ConfigurableJoint _configurableJoint;
+
+    [SerializeField]
+    private Vector3 _jointOffset;
+
+    [SerializeField]
     private int _isLeftOrRight;
 
-    private Rigidbody _rigidbody;
+    [SerializeField]
+    private float _speed = 7f;
+
+    private Rigidbody _handRigidbody;
+    private Quaternion _initialTargetRotation;
+
     private GameObject _grabbedObject;
+    private FixedJoint _grabbedObjectJoint;
+    private Rigidbody _grabbedObjectRigidbody;
     private float _grabbedObjectInitialMass;
 
     private void Start()
     {
-        _rigidbody = GetComponent<Rigidbody>();
+        _handRigidbody = GetComponent<Rigidbody>();
+        _initialTargetRotation = _configurableJoint.targetRotation;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(_isLeftOrRight))
+        if (Input.GetMouseButton(_isLeftOrRight))
         {
-            if (_isLeftOrRight == 0)
-            {
-                _animator.SetBool("IsLeftHandUp", true);
-            }
-            else if (_isLeftOrRight == 1)
-            {
-                _animator.SetBool("IsRightHandUp", true);
-            }
+            _configurableJoint.targetRotation = Quaternion.Lerp(_configurableJoint.targetRotation, Quaternion.LookRotation(_cameraFollowTargetTransform.forward + _jointOffset), Time.deltaTime * _speed);
 
-            if (_grabbedObject != null)
-            {
-                _grabbedObject.GetComponent<Rigidbody>().mass = 0.0001f;
+            JointDrive jointXDrive = _configurableJoint.angularXDrive;
+            jointXDrive.positionSpring = 1000f;
+            _configurableJoint.angularXDrive = jointXDrive;
 
-                FixedJoint fixedJoint = _grabbedObject.AddComponent<FixedJoint>();
-                fixedJoint.connectedBody = _rigidbody;
-                fixedJoint.breakForce = 9001;
+            JointDrive jointYZDrive = _configurableJoint.angularYZDrive;
+            jointYZDrive.positionSpring = 1000f;
+            _configurableJoint.angularYZDrive = jointYZDrive;
+
+            if (_grabbedObject != null && _grabbedObjectJoint == null)
+            {
+                if (_grabbedObjectRigidbody != null)
+                {
+                    _grabbedObjectRigidbody.mass = 0.0001f;
+                }
+
+                _grabbedObjectJoint = _grabbedObject.AddComponent<FixedJoint>();
+                _grabbedObjectJoint.connectedBody = _handRigidbody;
+                _grabbedObjectJoint.breakForce = 9001;
             }
         }
-        else if (Input.GetMouseButtonUp(_isLeftOrRight))
+        else
         {
-            if (_isLeftOrRight == 0)
-            {
-                _animator.SetBool("IsLeftHandUp", false);
-            }
-            else if (_isLeftOrRight == 1)
-            {
-                _animator.SetBool("IsRightHandUp", false);
-            }
+            _configurableJoint.targetRotation = Quaternion.Lerp(_configurableJoint.targetRotation, _initialTargetRotation, Time.deltaTime * _speed);
 
-            if (_grabbedObject != null)
+            JointDrive jointXDrive = _configurableJoint.angularXDrive;
+            jointXDrive.positionSpring = 1f;
+            _configurableJoint.angularXDrive = jointXDrive;
+
+            JointDrive jointYZDrive = _configurableJoint.angularYZDrive;
+            jointYZDrive.positionSpring = 1f;
+            _configurableJoint.angularYZDrive = jointYZDrive;
+
+            if (_grabbedObject != null && _grabbedObjectJoint != null)
             {
-                _grabbedObject.GetComponent<Rigidbody>().mass = _grabbedObjectInitialMass;
+                if (_grabbedObjectRigidbody != null)
+                {
+                    _grabbedObjectRigidbody.mass = _grabbedObjectInitialMass;
+                }
 
-                Destroy(_grabbedObject.GetComponent<FixedJoint>());
+                Destroy(_grabbedObjectJoint);
+
+                _grabbedObject = null;
+                _grabbedObjectJoint = null;
             }
-
-            _grabbedObject = null;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_grabbedObject == null && other.gameObject.CompareTag("Item"))
+        if (_grabbedObject == null && !other.gameObject.CompareTag("Player"))
         {
             _grabbedObject = other.gameObject;
-            _grabbedObjectInitialMass = _grabbedObject.GetComponent<Rigidbody>().mass;
+
+            _grabbedObjectRigidbody = _grabbedObject.GetComponent<Rigidbody>();
+            if (_grabbedObjectRigidbody != null)
+            {
+                _grabbedObjectInitialMass = _grabbedObjectRigidbody.mass;
+            }
         }
     }
 
