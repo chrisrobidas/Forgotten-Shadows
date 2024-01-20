@@ -6,6 +6,9 @@ public class Grab : MonoBehaviour
     private Animator _animator;
 
     [SerializeField]
+    private PlayerController _playerController;
+
+    [SerializeField]
     private Transform _cameraFollowTargetTransform;
 
     [SerializeField]
@@ -38,7 +41,25 @@ public class Grab : MonoBehaviour
     {
         if (Input.GetMouseButton(_isLeftOrRight))
         {
-            _configurableJoint.targetRotation = Quaternion.Lerp(_configurableJoint.targetRotation, Quaternion.LookRotation(_cameraFollowTargetTransform.forward + _jointOffset), Time.deltaTime * _speed);
+            Vector3 newTargetRotation = _cameraFollowTargetTransform.forward + _jointOffset;
+
+            float jointRotationModifier = 90.0f;
+
+            if (_playerController.IsBeingMoved)
+            {
+                jointRotationModifier = 360f;
+            }
+
+            if (newTargetRotation.y >= 0)
+            {
+                newTargetRotation.y = -Mathf.Sqrt(newTargetRotation.y) * jointRotationModifier;
+            }
+            else
+            {
+                newTargetRotation.y = Mathf.Sqrt(-newTargetRotation.y) * (jointRotationModifier / 2);
+            }
+
+            _configurableJoint.targetRotation = Quaternion.Lerp(_configurableJoint.targetRotation, Quaternion.LookRotation(newTargetRotation), Time.deltaTime * _speed);
 
             JointDrive jointXDrive = _configurableJoint.angularXDrive;
             jointXDrive.positionSpring = 1000f;

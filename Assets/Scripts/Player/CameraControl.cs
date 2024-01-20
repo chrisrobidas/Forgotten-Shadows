@@ -33,14 +33,14 @@ public class CameraControl : MonoBehaviour
     {
         _mouseX += Input.GetAxis("Mouse X") * _rotationSpeed;
         _mouseY -= Input.GetAxis("Mouse Y") * _rotationSpeed;
-        _mouseY = Mathf.Clamp(_mouseY, -60, 60);
+        _mouseY = Mathf.Clamp(_mouseY, -30, 60);
 
         _cameraFollowTarget.rotation = Quaternion.Euler(_mouseY, _mouseX, 0);
 
         _hipJoint.targetRotation = Quaternion.Euler(0, -_mouseX, 0);
         _stomachJoint.targetRotation = Quaternion.Euler(-_mouseY, 0, 0);
 
-        int layerMask = ~(1 << LayerMask.NameToLayer("NoSelfCollision"));
+        int layerMask = ~((1 << LayerMask.NameToLayer("NoSelfCollision")) | (1 << LayerMask.NameToLayer("NoSelfCameraCollision")));
 
         Debug.DrawLine(_cameraFollowTarget.position, _cameraFollowTarget.position + _cameraFollowTarget.localRotation * _cameraInitialLocalPosition, Color.red);
 

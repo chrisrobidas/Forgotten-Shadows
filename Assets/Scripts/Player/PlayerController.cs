@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public bool IsGrounded;
+    public bool IsBeingMoved;
 
     [SerializeField]
     private Animator _animator;
@@ -25,8 +26,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        IsBeingMoved = false;
+
         if (Input.GetKey(KeyCode.W))
         {
+            IsBeingMoved = true;
             _animator.SetBool("IsWalking", true);
 
             if (Input.GetKey(KeyCode.LeftShift))
@@ -48,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A)) 
         {
+            IsBeingMoved = true;
             _animator.SetBool("IsMovingLeft", true);
             _hips.AddForce(-_hips.transform.right * _strafeSpeed);
         }
@@ -58,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.S))
         {
+            IsBeingMoved = true;
             _animator.SetBool("IsWalking", true);
             _hips.AddForce(-_hips.transform.forward * _speed);
         }
@@ -69,6 +75,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
+            IsBeingMoved = true;
             _animator.SetBool("IsMovingRight", true);
             _hips.AddForce(_hips.transform.right * _strafeSpeed);
         }
