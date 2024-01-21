@@ -47,7 +47,7 @@ public class Grab : MonoBehaviour
 
             if (_playerController.IsBeingMoved)
             {
-                jointRotationModifier = 360f;
+                jointRotationModifier = 180f;
             }
 
             if (newTargetRotation.y >= 0)

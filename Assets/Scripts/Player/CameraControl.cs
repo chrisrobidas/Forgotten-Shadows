@@ -6,6 +6,9 @@ public class CameraControl : MonoBehaviour
     private float _rotationSpeed = 1.0f;
 
     [SerializeField]
+    private PlayerController _playerController;
+
+    [SerializeField]
     private Transform _cameraFollowTarget;
 
     [SerializeField]
@@ -33,9 +36,25 @@ public class CameraControl : MonoBehaviour
     {
         _mouseX += Input.GetAxis("Mouse X") * _rotationSpeed;
         _mouseY -= Input.GetAxis("Mouse Y") * _rotationSpeed;
-        _mouseY = Mathf.Clamp(_mouseY, -30, 60);
 
-        _cameraFollowTarget.rotation = Quaternion.Euler(_mouseY, _mouseX, 0);
+        float cameraLerpSpeed = 10f;
+
+        if (_playerController.IsBeingMoved)
+        {
+            if (!(_cameraFollowTarget.eulerAngles.x >= 330.0f && _cameraFollowTarget.eulerAngles.x <= 359.0f))
+            {
+                cameraLerpSpeed = 3f;
+            }
+
+            _mouseY = Mathf.Clamp(_mouseY, -30, -1);
+        }
+        else
+        {
+            _mouseY = Mathf.Clamp(_mouseY, -60, 60);
+        }
+
+        _cameraFollowTarget.rotation = Quaternion.Euler(_cameraFollowTarget.eulerAngles.x, _mouseX, 0);
+        _cameraFollowTarget.rotation = Quaternion.Lerp(_cameraFollowTarget.rotation, Quaternion.Euler(_mouseY, _mouseX, 0), Time.deltaTime * cameraLerpSpeed);
 
         _hipJoint.targetRotation = Quaternion.Euler(0, -_mouseX, 0);
         _stomachJoint.targetRotation = Quaternion.Euler(-_mouseY, 0, 0);
