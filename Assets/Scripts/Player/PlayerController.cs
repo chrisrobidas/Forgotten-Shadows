@@ -2,30 +2,47 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public bool IsGrounded;
     public bool IsBeingMoved;
 
     [SerializeField]
     private Animator _animator;
 
     [SerializeField]
-    private float _speed = 2.0f;
+    private Collider _rightFootCollider;
 
     [SerializeField]
-    private float _strafeSpeed;
+    private Collider _leftFootCollider;
 
     [SerializeField]
-    private float _jumpForce;
+    private float _speed = 100f;
+
+    [SerializeField]
+    private float _strafeSpeed = 100f;
+
+    [SerializeField]
+    private float _jumpForce = 8000f;
 
     private Rigidbody _hips;
+    private float _distanceToGround;
+
+    public bool IsGrounded()
+    {
+        bool rightFootIsGrounded = Physics.Raycast(_rightFootCollider.transform.position, -Vector3.up, _distanceToGround + 0.1f);
+        bool leftFootIsGrounded = Physics.Raycast(_leftFootCollider.transform.position, -Vector3.up, _distanceToGround + 0.1f);
+        return rightFootIsGrounded || leftFootIsGrounded;
+    }
 
     private void Start()
     {
         _hips = GetComponent<Rigidbody>();
+        _distanceToGround = _rightFootCollider.bounds.extents.y;
     }
 
     private void FixedUpdate()
     {
+        Debug.DrawRay(_rightFootCollider.transform.position, -Vector3.up * (_distanceToGround + 0.1f), Color.blue);
+        Debug.DrawRay(_leftFootCollider.transform.position, -Vector3.up * (_distanceToGround + 0.1f), Color.blue);
+
         IsBeingMoved = false;
 
         if (Input.GetKey(KeyCode.W))
@@ -83,13 +100,15 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool("IsMovingRight", false);
         }
+    }
 
-        if (Input.GetAxis("Jump") > 0)
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (IsGrounded)
+            if (IsGrounded())
             {
                 _hips.AddForce(new Vector3(0, _jumpForce, 0));
-                IsGrounded = false;
             }
         }
     }
