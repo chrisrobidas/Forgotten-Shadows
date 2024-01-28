@@ -6,26 +6,16 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private GameObject _pauseCanvas;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (_pauseCanvas.activeSelf)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
-    }
+    [SerializeField]
+    private GameObject _pausePanel;
 
-    private void Pause()
+    [SerializeField]
+    private GameObject _settingsPanel;
+
+    public void ToggleSettings()
     {
-        Time.timeScale = 0.0f;
-        _pauseCanvas.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
+        _pausePanel.SetActive(!_pausePanel.activeSelf);
+        _settingsPanel.SetActive(!_settingsPanel.activeSelf);
     }
 
     public void Resume()
@@ -50,5 +40,34 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_settingsPanel.activeSelf)
+            {
+                _pausePanel.SetActive(true);
+                _settingsPanel.SetActive(false);
+            }
+            else if (_pauseCanvas.activeSelf)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+    }
+
+    private void Pause()
+    {
+        Time.timeScale = 0.0f;
+        _pauseCanvas.SetActive(true);
+        _pausePanel.SetActive(true);
+        _settingsPanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.None;
     }
 }
