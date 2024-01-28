@@ -14,7 +14,7 @@ public class SettingsPanel : MonoBehaviour
     private List<Resolution> _filteredResolutions;
 
     private FullScreenMode _selectedDisplayMode;
-    private Resolution _selectedResolution;
+    private int _selectedResolutionIndex;
 
     public void SetDisplayMode(int displayModeIndex)
     {
@@ -23,18 +23,19 @@ public class SettingsPanel : MonoBehaviour
 
     public void SetResolution(int resolutionIndex)
     {
-        _selectedResolution = _filteredResolutions[resolutionIndex];
+        _selectedResolutionIndex = resolutionIndex;
     }
 
     public void ApplySettings()
     {
-        Screen.SetResolution(_selectedResolution.width, _selectedResolution.height, _selectedDisplayMode);
+        Screen.SetResolution(_filteredResolutions[_selectedResolutionIndex].width, _filteredResolutions[_selectedResolutionIndex].height, _selectedDisplayMode);
     }
 
     private void Start()
     {
         FillDisplayModeOptions();
         FillResolutionOptions();
+        ApplySettings();
     }
 
     private void FillDisplayModeOptions()
@@ -44,8 +45,9 @@ public class SettingsPanel : MonoBehaviour
         displayModeOptions.Add("Windowed");
         displayModeOptions.Add("Exclusive Full Screen");
 
-        int currentDisplayModeIndex = DisplayModeToOptionIndex(Screen.fullScreenMode);
-
+        _selectedDisplayMode = Screen.fullScreenMode;
+        int currentDisplayModeIndex = DisplayModeToOptionIndex(_selectedDisplayMode);
+        
         _displayModeDropdown.ClearOptions();
 
         _displayModeDropdown.AddOptions(displayModeOptions);
@@ -69,19 +71,18 @@ public class SettingsPanel : MonoBehaviour
         }
 
         List<string> resolutionOptions = new List<string>();
-        int currentResolutionIndex = 0;
         for (int i = 0; i < _filteredResolutions.Count; i++)
         {
             string resolutionOption = _filteredResolutions[i].width + "x" + _filteredResolutions[i].height + " " + (int)_filteredResolutions[i].refreshRateRatio.value + "Hz";
             resolutionOptions.Add(resolutionOption);
             if (_filteredResolutions[i].width == Screen.width && _filteredResolutions[i].height == Screen.height)
             {
-                currentResolutionIndex = i;
+                _selectedResolutionIndex = i;
             }
         }
 
         _resolutionDropdown.AddOptions(resolutionOptions);
-        _resolutionDropdown.value = currentResolutionIndex;
+        _resolutionDropdown.value = _selectedResolutionIndex;
         _resolutionDropdown.RefreshShownValue();
     }
 
