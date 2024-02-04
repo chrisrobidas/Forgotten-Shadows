@@ -39,7 +39,7 @@ public class CameraControl : MonoBehaviour
 
         float cameraLerpSpeed = 10f;
 
-        if (_playerController.IsBeingMoved)
+        if (_playerController.IsBeingMoved && _playerController.IsGrounded())
         {
             if (!(_cameraFollowTarget.eulerAngles.x >= 330.0f && _cameraFollowTarget.eulerAngles.x <= 359.0f))
             {

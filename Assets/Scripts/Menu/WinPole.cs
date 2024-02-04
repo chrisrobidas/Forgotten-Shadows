@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class WinPole : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _winCanvas;
+    private GameObject _winPanel;
 
     private AudioSource _audioSource;
 
@@ -16,9 +16,9 @@ public class WinPole : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!_winCanvas.activeSelf && other.gameObject.CompareTag("Player"))
+        if (!_winPanel.activeSelf && other.gameObject.CompareTag("Player"))
         {
-            _winCanvas.SetActive(true);
+            _winPanel.SetActive(true);
             _audioSource.Play();
             StartCoroutine(LoadLevelAfterDelay());
         }

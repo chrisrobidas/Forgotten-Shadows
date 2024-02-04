@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [HideInInspector]
     public bool IsBeingMoved;
 
     [SerializeField]

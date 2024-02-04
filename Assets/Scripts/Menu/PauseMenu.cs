@@ -4,9 +4,6 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _pauseCanvas;
-
-    [SerializeField]
     private GameObject _pausePanel;
 
     [SerializeField]
@@ -21,7 +18,7 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         Time.timeScale = 1.0f;
-        _pauseCanvas.SetActive(false);
+        _pausePanel.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -51,7 +48,7 @@ public class PauseMenu : MonoBehaviour
                 _pausePanel.SetActive(true);
                 _settingsPanel.SetActive(false);
             }
-            else if (_pauseCanvas.activeSelf)
+            else if (_pausePanel.activeSelf)
             {
                 Resume();
             }
@@ -65,7 +62,6 @@ public class PauseMenu : MonoBehaviour
     private void Pause()
     {
         Time.timeScale = 0.0f;
-        _pauseCanvas.SetActive(true);
         _pausePanel.SetActive(true);
         _settingsPanel.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
