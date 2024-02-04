@@ -6,6 +6,9 @@ public class CameraControl : MonoBehaviour
     private float _rotationSpeed = 1.0f;
 
     [SerializeField]
+    private Climb _playerCharacterClimb;
+
+    [SerializeField]
     private PlayerController _playerController;
 
     [SerializeField]
@@ -39,11 +42,11 @@ public class CameraControl : MonoBehaviour
 
         float cameraLerpSpeed = 10f;
 
-        if (_playerController.IsBeingMoved && _playerController.IsGrounded())
+        if (_playerController.IsBeingMoved && _playerController.IsGrounded() && !_playerCharacterClimb.IsClimbing())
         {
             if (!(_cameraFollowTarget.eulerAngles.x >= 330.0f && _cameraFollowTarget.eulerAngles.x <= 359.0f))
             {
-                cameraLerpSpeed = 3f;
+                cameraLerpSpeed = 1.5f;
             }
 
             _mouseY = Mathf.Clamp(_mouseY, -30, -1);
@@ -56,8 +59,13 @@ public class CameraControl : MonoBehaviour
         _cameraFollowTarget.rotation = Quaternion.Euler(_cameraFollowTarget.eulerAngles.x, _mouseX, 0);
         _cameraFollowTarget.rotation = Quaternion.Lerp(_cameraFollowTarget.rotation, Quaternion.Euler(_mouseY, _mouseX, 0), Time.deltaTime * cameraLerpSpeed);
 
+        float adjustedMouseY = _mouseY < 0 ? -1 + (_mouseY * 0.08f) : 1 + (_mouseY * 0.08f);
+        adjustedMouseY = adjustedMouseY < 0 ? -adjustedMouseY : adjustedMouseY;
+        adjustedMouseY = Mathf.Sqrt(adjustedMouseY);
+        adjustedMouseY = Mathf.Clamp(_mouseY * adjustedMouseY, -30, 90);
+
         _hipJoint.targetRotation = Quaternion.Euler(0, -_mouseX, 0);
-        _stomachJoint.targetRotation = Quaternion.Euler(-_mouseY, 0, 0);
+        _stomachJoint.targetRotation = Quaternion.Euler(-adjustedMouseY, 0, 0);
 
         int layerMask = ~((1 << LayerMask.NameToLayer("NoSelfCollision")) | (1 << LayerMask.NameToLayer("NoSelfCameraCollision")));
 

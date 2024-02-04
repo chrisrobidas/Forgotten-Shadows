@@ -51,6 +51,11 @@ public class Grab : MonoBehaviour
         return IsGrabbing() && _grabbedObjectIsKinematic && !_playerController.IsGrounded();
     }
 
+    public bool IsGrabingKinematicObject()
+    {
+        return IsGrabbing() && _grabbedObjectIsKinematic;
+    }
+
     private void Start()
     {
         _handRigidbody = GetComponent<Rigidbody>();
@@ -87,7 +92,7 @@ public class Grab : MonoBehaviour
         }
         else
         {
-            newTargetRotation.y = Mathf.Sqrt(-newTargetRotation.y) * (jointRotationModifier / 2);
+            newTargetRotation.y = Mathf.Sqrt(-newTargetRotation.y) * jointRotationModifier;
         }
 
         _configurableJoint.targetRotation = Quaternion.Lerp(_configurableJoint.targetRotation, Quaternion.LookRotation(newTargetRotation), Time.deltaTime * _speed);

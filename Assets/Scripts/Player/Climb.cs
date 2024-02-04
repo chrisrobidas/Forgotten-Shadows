@@ -27,7 +27,7 @@ public class Climb : MonoBehaviour
 
     public bool IsClimbing()
     {
-        return _cameraFollowTarget.eulerAngles.x >= 30.0f && _cameraFollowTarget.eulerAngles.x <= 61.0f && _rightGrab.IsHanging() && _leftGrab.IsHanging();
+        return _cameraFollowTarget.eulerAngles.x >= 30.0f && _cameraFollowTarget.eulerAngles.x <= 61.0f && _rightGrab.IsGrabingKinematicObject() && _leftGrab.IsGrabingKinematicObject();
     }
 
     private void Start()
@@ -57,7 +57,7 @@ public class Climb : MonoBehaviour
             {
                 _elapsedNotGroundedTime += Time.deltaTime;
 
-                if (!IsSoftened && ((!IsClimbing() && _rightGrab.IsHanging() && _leftGrab.IsHanging())
+                if (!IsSoftened && ((!IsClimbing() && (_rightGrab.IsHanging() || _leftGrab.IsHanging()))
                     || (!_rightGrab.IsHanging() && !_leftGrab.IsHanging() && _elapsedNotGroundedTime > 2)))
                 {
                     SoftenPlayerCharacterJoints();
