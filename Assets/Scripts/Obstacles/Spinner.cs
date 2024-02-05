@@ -3,7 +3,7 @@ using UnityEngine;
 public class Spinner : MonoBehaviour
 {
     [SerializeField]
-    private float _spinnerSpeed = 30;
+    private float _spinnerSpeed = 100;
 
     private void Update()
     {
