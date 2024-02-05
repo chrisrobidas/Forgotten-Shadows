@@ -9,6 +9,9 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private GameObject _settingsPanel;
 
+    [SerializeField]
+    private GameObject _globalVolume;
+
     public void ToggleSettings()
     {
         _pausePanel.SetActive(!_pausePanel.activeSelf);
@@ -19,6 +22,7 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         _pausePanel.SetActive(false);
+        _globalVolume.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -46,6 +50,7 @@ public class PauseMenu : MonoBehaviour
             if (_settingsPanel.activeSelf)
             {
                 _pausePanel.SetActive(true);
+                _globalVolume.SetActive(true);
                 _settingsPanel.SetActive(false);
             }
             else if (_pausePanel.activeSelf)
@@ -63,6 +68,7 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 0.0f;
         _pausePanel.SetActive(true);
+        _globalVolume.SetActive(true);
         _settingsPanel.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
     }
