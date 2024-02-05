@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2684789787563599645}
   - component: {fileID: 2746714068450200672}
   - component: {fileID: 2606449351224891706}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6155,7 +6155,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &3312078354092699501
 GameObject:
   m_ObjectHideFlags: 0
@@ -6171,7 +6171,7 @@ GameObject:
   - component: {fileID: 4651159937821531098}
   - component: {fileID: 5379997895461651524}
   - component: {fileID: 3953553012693320572}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44118,7 +44118,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &5381567622922733242
 GameObject:
   m_ObjectHideFlags: 0
@@ -44134,7 +44134,7 @@ GameObject:
   - component: {fileID: 9044129284915685933}
   - component: {fileID: 9152514943077974342}
   - component: {fileID: 1332406918709297056}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50274,7 +50274,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &6585524330619676735
 GameObject:
   m_ObjectHideFlags: 0
@@ -50290,7 +50290,7 @@ GameObject:
   - component: {fileID: 704614856946242037}
   - component: {fileID: 5751999037502209729}
   - component: {fileID: 477332125074623913}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cylinder (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56430,7 +56430,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &6769984710540808319
 GameObject:
   m_ObjectHideFlags: 0
@@ -56525,7 +56525,7 @@ GameObject:
   - component: {fileID: 3990788165636124019}
   - component: {fileID: 6418909528378247894}
   - component: {fileID: 7974892672396721681}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94472,4 +94472,4 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
