@@ -39,7 +39,8 @@ public class Grab : MonoBehaviour
     private FixedJoint _grabbedObjectJoint;
     private Rigidbody _grabbedObjectRigidbody;
     private float _grabbedObjectInitialMass;
-    private bool _grabbedObjectIsKinematic;
+    private bool _isGrabbedObjectKinematic;
+    private bool _isGrabbedObjectARope;
 
     public bool IsGrabbing()
     {
@@ -48,12 +49,12 @@ public class Grab : MonoBehaviour
 
     public bool IsHanging()
     {
-        return IsGrabbing() && _grabbedObjectIsKinematic && !_playerController.IsGrounded();
+        return IsGrabbing() && (_isGrabbedObjectKinematic || _isGrabbedObjectARope) && !_playerController.IsGrounded();
     }
 
     public bool IsGrabingKinematicObject()
     {
-        return IsGrabbing() && _grabbedObjectIsKinematic;
+        return IsGrabbing() && _isGrabbedObjectKinematic;
     }
 
     private void Start()
@@ -114,7 +115,7 @@ public class Grab : MonoBehaviour
 
         if (GrabbedObject != null && _grabbedObjectJoint == null)
         {
-            if (_grabbedObjectRigidbody != null)
+            if (_grabbedObjectRigidbody != null && _grabbedObjectRigidbody.CompareTag("Item"))
             {
                 _grabbedObjectRigidbody.mass = 0.0001f;
             }
@@ -141,7 +142,7 @@ public class Grab : MonoBehaviour
 
         if (GrabbedObject != null && _grabbedObjectJoint != null)
         {
-            if (_grabbedObjectRigidbody != null)
+            if (_grabbedObjectRigidbody != null && _grabbedObjectRigidbody.CompareTag("Item"))
             {
                 _grabbedObjectRigidbody.mass = _grabbedObjectInitialMass;
             }
@@ -158,7 +159,8 @@ public class Grab : MonoBehaviour
         if (GrabbedObject == null && !other.gameObject.CompareTag("Player"))
         {
             GrabbedObject = other.gameObject;
-            _grabbedObjectIsKinematic = GrabbedObject.GetComponent<Rigidbody>().isKinematic;
+            _isGrabbedObjectKinematic = GrabbedObject.GetComponent<Rigidbody>().isKinematic;
+            _isGrabbedObjectARope = GrabbedObject.CompareTag("Rope");
 
             _grabbedObjectRigidbody = GrabbedObject.GetComponent<Rigidbody>();
             if (_grabbedObjectRigidbody != null)

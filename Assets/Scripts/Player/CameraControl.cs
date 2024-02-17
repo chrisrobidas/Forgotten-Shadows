@@ -67,7 +67,7 @@ public class CameraControl : MonoBehaviour
         _hipJoint.targetRotation = Quaternion.Euler(0, -_mouseX, 0);
         _stomachJoint.targetRotation = Quaternion.Euler(-adjustedMouseY, 0, 0);
 
-        int layerMask = ~((1 << LayerMask.NameToLayer("NoSelfCollision")) | (1 << LayerMask.NameToLayer("NoSelfCameraCollision")));
+        int layerMask = ~((1 << LayerMask.NameToLayer("NoSelfCollision")) | (1 << LayerMask.NameToLayer("NoCameraCollision")));
 
         Debug.DrawLine(_cameraFollowTarget.position, _cameraFollowTarget.position + _cameraFollowTarget.localRotation * _cameraInitialLocalPosition, Color.red);
 
