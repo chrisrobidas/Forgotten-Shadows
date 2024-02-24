@@ -2,11 +2,8 @@ using UnityEngine;
 
 public class SwingingPole : MonoBehaviour
 {
-    [SerializeField]
-    private float _swingingPoleSpeed = 1;
-
-    [SerializeField]
-    private float _maxRotation = 60;
+    [SerializeField] private float _swingingPoleSpeed = 1;
+    [SerializeField] private float _maxRotation = 60;
 
     private void Update()
     {
