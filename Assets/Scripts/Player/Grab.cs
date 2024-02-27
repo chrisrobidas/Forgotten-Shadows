@@ -1,41 +1,25 @@
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.InputSystem.InputAction;
 
 public class Grab : MonoBehaviour
 {
-    [HideInInspector]
-    public GameObject GrabbedObject;
+    [HideInInspector] public GameObject GrabbedObject;
+    [HideInInspector] public UnityEvent OnDoGrab;
 
-    [HideInInspector]
-    public UnityEvent OnDoGrab;
+    [SerializeField] private Climb _playerCharacterClimb;
+    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private Transform _cameraFollowTargetTransform;
+    [SerializeField] private ConfigurableJoint _configurableJoint;
 
-    [SerializeField]
-    private Animator _animator;
+    [SerializeField] private Vector3 _jointOffset;
 
-    [SerializeField]
-    private Climb _playerCharacterClimb;
-
-    [SerializeField]
-    private PlayerController _playerController;
-
-    [SerializeField]
-    private Transform _cameraFollowTargetTransform;
-
-    [SerializeField]
-    private ConfigurableJoint _configurableJoint;
-
-    [SerializeField]
-    private Vector3 _jointOffset;
-
-    [SerializeField]
-    private int _isLeftOrRight;
-
-    [SerializeField]
-    private float _speed = 7f;
+    [SerializeField] private float _speed = 7f;
 
     private Rigidbody _handRigidbody;
     private Quaternion _initialTargetRotation;
 
+    private bool _isHoldingGrabInput;
     private FixedJoint _grabbedObjectJoint;
     private Rigidbody _grabbedObjectRigidbody;
     private float _grabbedObjectInitialMass;
@@ -57,6 +41,18 @@ public class Grab : MonoBehaviour
         return IsGrabbing() && _isGrabbedObjectKinematic;
     }
 
+    public void OnGrab(CallbackContext context)
+    {
+        if (context.started)
+        {
+            _isHoldingGrabInput = true;
+        }
+        else if (context.canceled)
+        {
+            _isHoldingGrabInput = false;
+        }
+    }
+
     private void Start()
     {
         _handRigidbody = GetComponent<Rigidbody>();
@@ -65,9 +61,10 @@ public class Grab : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(_isLeftOrRight))
+        if (_isHoldingGrabInput)
         {
             if (IsHanging() && !_playerCharacterClimb.IsClimbing()) return;
+
             DoGrab();
         }
         else
@@ -156,16 +153,16 @@ public class Grab : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (GrabbedObject == null && !other.gameObject.CompareTag("Player"))
+        if (GrabbedObject == null && !other.gameObject.CompareTag("Player") && !other.isTrigger)
         {
             GrabbedObject = other.gameObject;
-            _isGrabbedObjectKinematic = GrabbedObject.GetComponent<Rigidbody>().isKinematic;
             _isGrabbedObjectARope = GrabbedObject.CompareTag("Rope");
-
             _grabbedObjectRigidbody = GrabbedObject.GetComponent<Rigidbody>();
+
             if (_grabbedObjectRigidbody != null)
             {
                 _grabbedObjectInitialMass = _grabbedObjectRigidbody.mass;
+                _isGrabbedObjectKinematic = _grabbedObjectRigidbody.isKinematic;
             }
         }
     }

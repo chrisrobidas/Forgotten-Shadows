@@ -1,28 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CustomizationPanel : MonoBehaviour
+public class CustomizationPanel : NavigableMenu
 {
-    [SerializeField]
-    private CharacterCustomizationApply _characterCustomizationApply;
+    [SerializeField] private CharacterCustomizationApply _characterCustomizationApply;
 
-    [SerializeField]
-    private Slider _bodyHueSlider;
-
-    [SerializeField]
-    private Slider _bodySaturationSlider;
-
-    [SerializeField]
-    private Slider _bodyValueSlider;
-
-    [SerializeField]
-    private Slider _eyesHueSlider;
-
-    [SerializeField]
-    private Slider _eyesSaturationSlider;
-
-    [SerializeField]
-    private Slider _eyesValueSlider;
+    [SerializeField] private Slider _bodyHueSlider;
+    [SerializeField] private Slider _bodySaturationSlider;
+    [SerializeField] private Slider _bodyValueSlider;
+    [SerializeField] private Slider _eyesHueSlider;
+    [SerializeField] private Slider _eyesSaturationSlider;
+    [SerializeField] private Slider _eyesValueSlider;
 
     public void Save()
     {

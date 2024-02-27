@@ -5,11 +5,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(TMP_InputField)), ExecuteInEditMode()]
 public class SliderIntegerInput : MonoBehaviour
 {
-    [SerializeField]
-    private int _maxValue;
-
-    [SerializeField]
-    private Slider _slider;
+    [SerializeField] private int _maxValue;
+    [SerializeField] private Slider _slider;
 
     private TMP_InputField _integerInputField;
     private bool _ignoreNotify;

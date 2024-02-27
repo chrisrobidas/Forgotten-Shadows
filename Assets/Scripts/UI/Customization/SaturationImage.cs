@@ -4,11 +4,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image)), ExecuteInEditMode()]
 public class SaturationImage : MonoBehaviour
 {
-    [SerializeField]
-    private Slider _hueSlider;
-
-    [SerializeField]
-    private Slider _valueSlider;
+    [SerializeField] private Slider _hueSlider;
+    [SerializeField] private Slider _valueSlider;
 
     private Image _image;
 

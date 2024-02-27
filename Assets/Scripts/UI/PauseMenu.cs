@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : NavigableMenu
 {
     public void Resume()
     {

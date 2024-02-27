@@ -2,23 +2,14 @@ using UnityEngine;
 
 public class CharacterCustomizationApply : MonoBehaviour
 {
-    [HideInInspector]
-    public Material BodyPartsMaterialInstance;
+    [HideInInspector] public Material BodyPartsMaterialInstance;
+    [HideInInspector] public Material EyesMaterialInstance;
 
-    [HideInInspector]
-    public Material EyesMaterialInstance;
+    [SerializeField] private Renderer[] _bodyPartsRenderers;
+    [SerializeField] private Renderer[] _eyesRenderers;
 
-    [SerializeField]
-    private Renderer[] _bodyPartsRenderers;
-
-    [SerializeField]
-    private Renderer[] _eyesRenderers;
-
-    [SerializeField]
-    private Material _bodyMaterial;
-
-    [SerializeField]
-    private Material _eyesMaterial;
+    [SerializeField] private Material _bodyMaterial;
+    [SerializeField] private Material _eyesMaterial;
 
     public void ApplyCustomization()
     {

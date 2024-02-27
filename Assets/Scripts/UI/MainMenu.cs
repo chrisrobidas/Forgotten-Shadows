@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public class MainMenu : MonoBehaviour
+public class MainMenu : NavigableMenu
 {
     public void Play()
     {

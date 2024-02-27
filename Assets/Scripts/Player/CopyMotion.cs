@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class CopyMotion : MonoBehaviour
 {
-    [SerializeField]
-    private Transform _targetLimb;
+    [SerializeField] private Transform _targetLimb;
 
     private ConfigurableJoint _configurableJoint;
     private Quaternion _initialRotation;

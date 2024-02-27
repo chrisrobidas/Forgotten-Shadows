@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.InputSystem.InputAction;
 
 public class UIManager : MonoBehaviour
 {
@@ -15,12 +16,47 @@ public class UIManager : MonoBehaviour
 
     private List<GameObject> _allPanels;
 
+    public void OnResumeInput(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Resume();
+        }
+    }
+
+    public void OnBackInput(CallbackContext context)
+    {
+        if (context.started)
+        {
+            Back();
+        }
+    }
+
     public void Resume()
     {
+        if (_pauseMenuPanel == null) return;
+
         HideAllPanels();
         _globalVolume.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         GameManager.Instance.SetIsGamePaused(false);
+        Time.timeScale = 1.0f;
+    }
+
+    public void Back()
+    {
+        if (_mainMenuPanel != null && !_mainMenuPanel.activeSelf)
+        {
+            ShowMainMenuPanel();
+        }
+        else if (_pauseMenuPanel != null && !_pauseMenuPanel.activeSelf)
+        {
+            ShowPauseMenuPanel();
+        }
+        else if (_pauseMenuPanel != null)
+        {
+            Resume();
+        }
     }
 
     public void ShowMainMenuPanel()
@@ -28,15 +64,17 @@ public class UIManager : MonoBehaviour
         ShowPanel(_mainMenuPanel);
         _globalVolume.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
-        GameManager.Instance.SetIsGamePaused(false);
+        GameManager.Instance.SetIsGamePaused(true);
+        Time.timeScale = 1.0f;
     }
 
-    private void ShowPauseMenuPanel()
+    public void ShowPauseMenuPanel()
     {
         ShowPanel(_pauseMenuPanel);
         _globalVolume.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         GameManager.Instance.SetIsGamePaused(true);
+        Time.timeScale = 0.0f;
     }
 
     public void ShowCustomizationMenuPanel()
@@ -44,7 +82,8 @@ public class UIManager : MonoBehaviour
         ShowPanel(_customizationMenuPanel);
         _globalVolume.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
-        GameManager.Instance.SetIsGamePaused(false);
+        GameManager.Instance.SetIsGamePaused(true);
+        Time.timeScale = 1.0f;
     }
 
     public void ShowSettingsMenuPanel()
@@ -53,6 +92,7 @@ public class UIManager : MonoBehaviour
         _globalVolume.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         GameManager.Instance.SetIsGamePaused(true);
+        Time.timeScale = 0.0f;
     }
 
     public void ShowWinMenuPanel()
@@ -61,38 +101,19 @@ public class UIManager : MonoBehaviour
         _globalVolume.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         GameManager.Instance.SetIsGamePaused(false);
-    }
-
-    public void PauseOrBackSettings()
-    {
-        if (_settingsMenuPanel.activeSelf)
-        {
-            if (_mainMenuPanel != null)
-            {
-                ShowMainMenuPanel();
-            }
-            else
-            {
-                ShowPauseMenuPanel();
-            }
-        }
-        else if (_pauseMenuPanel != null)
-        {
-            if (_pauseMenuPanel.activeSelf)
-            {
-                Resume();
-            }
-            else
-            {
-                ShowPauseMenuPanel();
-            }
-        }
+        Time.timeScale = 1.0f;
     }
 
     private void ShowPanel(GameObject panelToShow)
     {
         HideAllPanels();
         panelToShow.SetActive(true);
+
+        NavigableMenu navigableMenuComponent = panelToShow.GetComponent<NavigableMenu>();
+        if (navigableMenuComponent != null)
+        {
+            navigableMenuComponent.SelectDefaultGameObject();
+        }
     }
 
     private void HideAllPanels()
@@ -124,14 +145,5 @@ public class UIManager : MonoBehaviour
             _settingsMenuPanel,
             _winMenuPanel
         };
-    }
-    
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            // TODO: Move the input handling in PlayerController, maybe in 2 separate methods/input profiles, one for the main menu and one for the play scenes
-            PauseOrBackSettings();
-        }
     }
 }

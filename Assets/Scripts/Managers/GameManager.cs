@@ -10,21 +10,24 @@ public class GameManager : MonoBehaviour
 
     public void SetIsGamePaused(bool isGamePaused)
     {
+        if (isGamePaused == IsGamePaused) return;
+
         IsGamePaused = isGamePaused;
 
         if (IsGamePaused)
         {
-            Time.timeScale = 0.0f;
+            InputManager.Instance.PlayerInput.SwitchCurrentActionMap("UI");
         }
         else
         {
-            Time.timeScale = 1.0f;
+            InputManager.Instance.PlayerInput.SwitchCurrentActionMap("Player");
         }
     }
 
     public void MainMenu()
     {
-        SetIsGamePaused(false);
+        SetIsGamePaused(true);
+        Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene(Constants.MAIN_MENU_SCENE_NAME);
     }
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour
     public void Play()
     {
         SetIsGamePaused(false);
+        Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.Locked;
         SceneManager.LoadScene(Constants.TEST_SCENE_NAME);
     }
@@ -39,16 +43,18 @@ public class GameManager : MonoBehaviour
     public void Restart()
     {
         SetIsGamePaused(false);
+        Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.Locked;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public IEnumerator LoadSceneAfterDelay(string sceneName, float delay, CursorLockMode cursorLockMode)
+    public IEnumerator LoadSceneAfterDelay(string sceneName, bool gameIsPaused, float delay, CursorLockMode cursorLockMode)
     {
-        SetIsGamePaused(false);
         yield return new WaitForSeconds(delay);
-        Cursor.lockState = cursorLockMode;
         SceneManager.LoadScene(sceneName);
+        Time.timeScale = 1.0f;
+        SetIsGamePaused(gameIsPaused);
+        Cursor.lockState = cursorLockMode;
     }
 
     public void QuitGame()

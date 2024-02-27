@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class SettingsMenu : MonoBehaviour
+public class SettingsMenu : NavigableMenu
 {
     [SerializeField] private TMP_Dropdown _displayModeDropdown;
     [SerializeField] private TMP_Dropdown _resolutionDropdown;
@@ -28,7 +28,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void Back()
     {
-        UIManager.Instance.PauseOrBackSettings();
+        UIManager.Instance.Back();
     }
 
     private void Awake()

@@ -16,7 +16,7 @@ public class WinPole : MonoBehaviour
         {
             UIManager.Instance.ShowWinMenuPanel();
             _audioSource?.Play();
-            StartCoroutine(GameManager.Instance.LoadSceneAfterDelay(Constants.MAIN_MENU_SCENE_NAME, 7, CursorLockMode.None));
+            StartCoroutine(GameManager.Instance.LoadSceneAfterDelay(Constants.MAIN_MENU_SCENE_NAME, true, 7, CursorLockMode.None));
             _hasWin = true;
         }
     }

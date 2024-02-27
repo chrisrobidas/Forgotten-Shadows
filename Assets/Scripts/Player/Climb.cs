@@ -2,23 +2,13 @@ using UnityEngine;
 
 public class Climb : MonoBehaviour
 {
-    [HideInInspector]
-    public bool IsSoftened;
+    [HideInInspector] public bool IsSoftened;
 
-    [SerializeField]
-    private Grab _rightGrab;
-
-    [SerializeField]
-    private Grab _leftGrab;
-
-    [SerializeField]
-    private PlayerController _playerController;
-
-    [SerializeField]
-    private Transform _cameraFollowTarget;
-
-    [SerializeField]
-    private ConfigurableJoint[] _playerCharacterJoints;
+    [SerializeField] private Grab _rightGrab;
+    [SerializeField] private Grab _leftGrab;
+    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private Transform _cameraFollowTarget;
+    [SerializeField] private ConfigurableJoint[] _playerCharacterJoints;
 
     private float[] _originalJointXDrivePositionSprings;
     private float[] _originalJointYZDrivePositionSprings;
