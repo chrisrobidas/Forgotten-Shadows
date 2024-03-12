@@ -12,7 +12,7 @@ public class WinPole : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!_hasWin && other.gameObject.CompareTag("Player"))
+        if (!_hasWin && (other.gameObject.CompareTag(Constants.PLAYER_TAG) || other.gameObject.CompareTag(Constants.PLAYER_FOOT_TAG)))
         {
             UIManager.Instance.ShowWinMenuPanel();
             _audioSource?.Play();

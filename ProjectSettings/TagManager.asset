@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Item
   - Rope
+  - PlayerFoot
   layers:
   - Default
   - TransparentFX

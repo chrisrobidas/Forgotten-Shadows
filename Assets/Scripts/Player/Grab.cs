@@ -112,7 +112,7 @@ public class Grab : MonoBehaviour
 
         if (GrabbedObject != null && _grabbedObjectJoint == null)
         {
-            if (_grabbedObjectRigidbody != null && _grabbedObjectRigidbody.CompareTag("Item"))
+            if (_grabbedObjectRigidbody != null && _grabbedObjectRigidbody.CompareTag(Constants.ITEM_TAG))
             {
                 _grabbedObjectRigidbody.mass = 0.0001f;
             }
@@ -139,7 +139,7 @@ public class Grab : MonoBehaviour
 
         if (GrabbedObject != null && _grabbedObjectJoint != null)
         {
-            if (_grabbedObjectRigidbody != null && _grabbedObjectRigidbody.CompareTag("Item"))
+            if (_grabbedObjectRigidbody != null && _grabbedObjectRigidbody.CompareTag(Constants.ITEM_TAG))
             {
                 _grabbedObjectRigidbody.mass = _grabbedObjectInitialMass;
             }
@@ -153,10 +153,10 @@ public class Grab : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (GrabbedObject == null && !other.gameObject.CompareTag("Player") && !other.isTrigger)
+        if (GrabbedObject == null && !other.gameObject.CompareTag(Constants.PLAYER_TAG) && !other.gameObject.CompareTag(Constants.PLAYER_FOOT_TAG) && !other.isTrigger)
         {
             GrabbedObject = other.gameObject;
-            _isGrabbedObjectARope = GrabbedObject.CompareTag("Rope");
+            _isGrabbedObjectARope = GrabbedObject.CompareTag(Constants.ROPE_TAG);
             _grabbedObjectRigidbody = GrabbedObject.GetComponent<Rigidbody>();
 
             if (_grabbedObjectRigidbody != null)

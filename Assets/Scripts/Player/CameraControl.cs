@@ -73,8 +73,9 @@ public class CameraControl : MonoBehaviour
             _mouseY = Mathf.Clamp(_mouseY, -60, 60);
         }
 
-        _cameraFollowTarget.rotation = Quaternion.Euler(_cameraFollowTarget.eulerAngles.x, _mouseX, 0);
-        _cameraFollowTarget.rotation = Quaternion.Lerp(_cameraFollowTarget.rotation, Quaternion.Euler(_mouseY, _mouseX, 0), Time.deltaTime * cameraLerpSpeed);
+        // Use local rotation fixed character rotation, but not _cameraInitialLocalPosition
+        _cameraFollowTarget.localRotation = Quaternion.Euler(_cameraFollowTarget.localRotation.eulerAngles.x, _mouseX, 0);
+        _cameraFollowTarget.localRotation = Quaternion.Lerp(_cameraFollowTarget.localRotation, Quaternion.Euler(_mouseY, _mouseX, 0), Time.deltaTime * cameraLerpSpeed);
 
         // Player body rotation depends on camera
         float adjustedMouseY = _mouseY < 0 ? -1 + (_mouseY * 0.08f) : 1 + (_mouseY * 0.08f);
@@ -88,9 +89,9 @@ public class CameraControl : MonoBehaviour
         // Camera collision with environment
         int layerMask = ~((1 << LayerMask.NameToLayer("NoSelfCollision")) | (1 << LayerMask.NameToLayer("NoCameraCollision")));
 
-        Debug.DrawLine(_cameraFollowTarget.position, _cameraFollowTarget.position + _cameraFollowTarget.localRotation * _cameraInitialLocalPosition, Color.red);
+        Debug.DrawLine(_cameraFollowTarget.position, _cameraFollowTarget.position + _cameraFollowTarget.rotation * _cameraInitialLocalPosition, Color.red);
 
-        if (Physics.Linecast(_cameraFollowTarget.position, _cameraFollowTarget.position + _cameraFollowTarget.localRotation * _cameraInitialLocalPosition, out RaycastHit hit, layerMask))
+        if (Physics.Linecast(_cameraFollowTarget.position, _cameraFollowTarget.position + _cameraFollowTarget.rotation * _cameraInitialLocalPosition, out RaycastHit hit, layerMask))
         {
             transform.position = hit.point + _cameraFollowTarget.localRotation * new Vector3(0, 0, 0.1f);
         }
