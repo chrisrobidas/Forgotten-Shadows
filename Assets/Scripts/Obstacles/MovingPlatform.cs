@@ -5,6 +5,7 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] private WaypointPath _waypointPath;
     [SerializeField] private int _initialWaypointIndex = 0;
     [SerializeField] private float _speed = 7;
+    [SerializeField] private float _platformVelocityIntensity = 600;
 
     private int _targetWaypointIndex;
 
@@ -14,8 +15,13 @@ public class MovingPlatform : MonoBehaviour
     private float _timeToWaypoint;
     private float _elapsedTime;
 
+    private Vector3 _previousPosition;
+    private Vector3 _platformVelocity;
+
     private void Start()
     {
+        _previousPosition = transform.position;
+
         _targetWaypointIndex = _initialWaypointIndex;
         TargetNextWaypoint();
     }
@@ -28,6 +34,9 @@ public class MovingPlatform : MonoBehaviour
         elapsedPercentage = Mathf.SmoothStep(0, 1, elapsedPercentage);
         transform.position = Vector3.Lerp(_previousWaypoint.position, _nextWaypoint.position, elapsedPercentage);
         transform.rotation = Quaternion.Lerp(_previousWaypoint.rotation, _nextWaypoint.rotation, elapsedPercentage);
+
+        _platformVelocity = (transform.position - _previousPosition) / Time.fixedDeltaTime;
+        _previousPosition = transform.position;
 
         if (elapsedPercentage >= 1 )
         {
@@ -60,6 +69,7 @@ public class MovingPlatform : MonoBehaviour
         if (other.CompareTag(Constants.PLAYER_FOOT_TAG))
         {
             other.transform.parent.transform.SetParent(null);
+            other.transform.parent.Find("Hips").GetComponent<Rigidbody>().AddForce(_platformVelocity * _platformVelocityIntensity);
         }
     }
 }

@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float _speed = 100f;
     [SerializeField] private float _strafeSpeed = 100f;
-    [SerializeField] private float _jumpForce = 8000f;
+    [SerializeField] private float _jumpForce = 150f;
     
     private float _distanceToGround;
 
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
     {
         if (IsGrounded())
         {
-            _hips.AddForce(new Vector3(0, _jumpForce, 0));
+            _hips.AddForce(new Vector3(0, _jumpForce, 0), ForceMode.Impulse);
         }
     }
 }

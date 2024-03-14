@@ -434,6 +434,7 @@ MonoBehaviour:
   _waypointPath: {fileID: 0}
   _initialWaypointIndex: 0
   _speed: 7
+  _platformVelocityIntensity: 600
 --- !u!33 &620355886287614509
 MeshFilter:
   m_ObjectHideFlags: 0
